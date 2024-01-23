@@ -1,9 +1,9 @@
 from aiogram.fsm.state import State, StatesGroup
 
 
-class LinkUser(StatesGroup):
-    link = State()
+class AddProduct(StatesGroup):
+    link_user = State()
     data = State()
-    name = State()
-    price = State()
-    count = State()
+    link = State()
+    yes_add = State()
+    no_add = State()
