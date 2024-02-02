@@ -7,3 +7,11 @@ class AddProduct(StatesGroup):
     link = State()
     yes_add = State()
     no_add = State()
+
+
+class LookProduct(StatesGroup):
+    start_look = State()
+
+
+class DelProduct(StatesGroup):
+    start_del = State()

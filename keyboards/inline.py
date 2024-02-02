@@ -17,13 +17,13 @@ menu_link_kb = InlineKeyboardMarkup(
         [
             InlineKeyboardButton(text='✅Добавить товар', callback_data='add_product')
         ],
-        [
-            InlineKeyboardButton(text='❇️Посмотреть товар', callback_data='look_product')
-        ],
+        # [
+        #     InlineKeyboardButton(text='❇️Посмотреть товар', callback_data='look_product')
+        # ],
         [
             InlineKeyboardButton(text='❎Удалить товар', callback_data='del_product')
         ]
-    ], resize_keyboard=True
+    ]
 
 )
 
@@ -45,16 +45,32 @@ exit_menu_kb = InlineKeyboardMarkup(
 )
 
 
-class GroupCallbackFactory(CallbackData, prefix="req"):
+class LookCallbackFactory(CallbackData, prefix="req"):
     action: str
 
 
-def get_keyboard_group(user_id):
+def get_keyboard_product(user_id):
     builder = InlineKeyboardBuilder()
     for i, y in enumerate(sql.look_product(user_id)):
         builder.button(
-            text=f'{y[1]}', callback_data=GroupCallbackFactory(action=f'{y[0]}')
+            text=f'{y[2]}', callback_data=LookCallbackFactory(action=f'{y[0]}')
         )
+    builder.button(text='Назад в меню', callback_data='exit_menu')
     builder.adjust(1)
-    return builder.as_markup()
+    return builder.as_markup(one_time_keyboard=True, resize_keyboard=True)
 
+
+class DelCallbackFactory(CallbackData, prefix="re"):
+    action: str
+
+
+def keyboard_product(user_id):
+    builder = InlineKeyboardBuilder()
+    for i, y in enumerate(sql.look_product(user_id)):
+        builder.button(
+            text=f'{y[2]}', callback_data=DelCallbackFactory(action=f'{y[0]}')
+        )
+    builder.button(text='Назад в меню', callback_data='exit_menu')
+    builder.adjust(1)
+
+    return builder.as_markup(resize_keyboard=True)

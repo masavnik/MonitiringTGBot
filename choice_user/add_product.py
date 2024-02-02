@@ -1,10 +1,9 @@
 import asyncio
 from aiogram.fsm.context import FSMContext
 from aiogram import Router, Bot, F
-from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
 from parsing.parsing_wb import ParsingWB
-from keyboards.inline import answer_link, main_kb, menu_link_kb, exit_menu_kb
+from keyboards.inline import answer_link, menu_link_kb, exit_menu_kb
 from sql.bot_sql import sql
 from utils.states import AddProduct
 
@@ -16,7 +15,8 @@ async def answer_link_user(callback: CallbackQuery, state: FSMContext, bot: Bot)
     await state.update_data(add_product=callback.message.text)
     await state.set_state(AddProduct.data)
     await callback.message.answer(
-        text='Отправь ссылку и я буду анализировать твой товары',
+        text='Отправь ссылку на товар и я буду ее анализировать\n'
+             'После добавления ссылки введи команду - /price',
         reply_markup=exit_menu_kb
     )
     await bot.delete_message(
@@ -72,6 +72,8 @@ async def get_link_user(message: Message, bot: Bot, state: FSMContext):
             reply_markup=answer_link
         )
 
+
+
     await state.set_state(AddProduct.link)
 
 
@@ -94,7 +96,7 @@ async def save_data(callback: CallbackQuery, state: FSMContext, bot: Bot):
     await bot.delete_message(chat_id=callback.from_user.id, message_id=callback.message.message_id)
     await callback.message.answer(
         text=f'🟣<b>{callback.from_user.first_name}, </b> выбери действие, которое хочешь сделать\n'
-             f'Если ничего не хочешь, то ничего не делай',
+             f'Введи /price, чтобы я начал мониторить цену',
         reply_markup=menu_link_kb
     )
 

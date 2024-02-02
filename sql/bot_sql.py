@@ -45,11 +45,20 @@ class SqlBot:
         self.cursor.execute("SELECT * FROM users;")
         return [i[2::] for i in self.cursor.fetchall() if user_id in i]
 
-    def del_data(self):
-        '''Удалить данные пользователя'''
-        ...
+    def del_product(self, article):
+        try:
+            self.cursor.execute(
+                f'DELETE FROM users WHERE article="{article}"'
+            )
+            self.connect.commit()
+        except sqlite3.IntegrityError:
+            return f'нет в вашем списке'
+
+    def update(self, price, article):
+        self.cursor.execute("UPDATE users SET price = ? WHERE article = ?", (price, article))
+        self.connect.commit()
 
 
 sql = SqlBot()
 # sql.create_table()
-print(sql.look_product(514132114))
+print(sql.update(199, 199335597))

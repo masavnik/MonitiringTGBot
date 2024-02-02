@@ -1,10 +1,6 @@
-from aiogram.fsm.context import FSMContext
 from aiogram import Router, Bot, F
-from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
-from parsing.parsing_wb import ParsingWB
-from keyboards.inline import answer_link, main_kb, menu_link_kb, exit_menu_kb
-from sql.bot_sql import sql
+from keyboards.inline import menu_link_kb
 
 router = Router()
 
